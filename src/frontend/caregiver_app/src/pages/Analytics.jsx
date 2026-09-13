@@ -23,9 +23,12 @@ import {
   HelpCircle,
   RefreshCw,
   Award,
+  FileText,
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { fetchPatients, getPatientById } from '../services/patientService';
+import { fetchPatientRiskOverview } from '../services/riskService';
+import { PatientReportCardModal } from '../components/PatientReportCardModal';
 import {
   getGameSessions,
   DOMAINS,
@@ -102,10 +105,12 @@ export const Analytics = () => {
 
   const [patient, setPatient] = useState(null);
   const [sessions, setSessions] = useState([]);
+  const [riskData, setRiskData] = useState(null);
+  const [showReportModal, setShowReportModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Load patient info and game session analytics
+  // Load patient info, game session analytics, and risk overview
   const loadData = async () => {
     let targetId = id;
     if (!targetId) {
@@ -125,13 +130,18 @@ export const Analytics = () => {
       setLoading(true);
       setError(null);
 
-      const [patientData, sessionsData] = await Promise.all([
+      const [patientData, sessionsData, riskOverviewData] = await Promise.all([
         getPatientById(targetId),
         getGameSessions(targetId),
+        fetchPatientRiskOverview().catch((err) => {
+          console.warn('Could not fetch risk overview:', err);
+          return null;
+        }),
       ]);
 
       setPatient(patientData);
       setSessions(sessionsData || []);
+      setRiskData(riskOverviewData);
     } catch (err) {
       console.error('Analytics load error:', err);
       setError(err?.message || 'Failed to load cognitive analytics data.');
@@ -419,7 +429,7 @@ export const Analytics = () => {
             </p>
           </div>
 
-          {/* Quick Metrics Badges */}
+          {/* Quick Metrics Badges & Download Report Card CTA */}
           <div className="flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
             <div className="bg-cream/70 dark:bg-ink-soft/30 border border-border/80 dark:border-ink-soft/40 rounded-card p-3.5 min-w-[120px]">
               <div className="text-[11px] font-semibold text-ink-soft dark:text-cream/60 uppercase tracking-wider">
@@ -447,6 +457,15 @@ export const Analytics = () => {
                 {stats.total > 0 ? Math.round((stats.completedCount / stats.total) * 100) : 0}%
               </div>
             </div>
+
+            <button
+              type="button"
+              onClick={() => setShowReportModal(true)}
+              className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-terracotta hover:bg-terracotta/90 text-cream text-xs sm:text-sm font-bold rounded-card shadow-sm hover:shadow transition-all cursor-pointer h-full self-stretch min-h-[58px]"
+            >
+              <FileText className="w-4 h-4" />
+              <span>Download Report Card</span>
+            </button>
           </div>
         </div>
       </div>
@@ -584,6 +603,17 @@ export const Analytics = () => {
           </div>
         )}
       </div>
+
+      {/* Patient Cognitive & Clinical Report Card Modal */}
+      <PatientReportCardModal
+        isOpen={showReportModal}
+        onClose={() => setShowReportModal(false)}
+        patient={patient}
+        sessions={sessions}
+        domainData={domainData}
+        riskOverview={riskData}
+        stats={stats}
+      />
     </div>
   );
 };
