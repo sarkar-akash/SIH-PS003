@@ -70,3 +70,48 @@ textarea {
   transition-property: background-color, border-color, box-shadow, color;
   transition-duration: 200ms;
 }
+
+/* Print styles for Patient Cognitive & Clinical Report Card */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #1A1815 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide background wallpapers, navigation bars, modal overlays and toolbars */
+  .motif-bg-pattern,
+  nav,
+  aside,
+  header,
+  .no-print {
+    display: none !important;
+  }
+
+  #clinical-report-card {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 16px 20px !important;
+    background: #FFFFFF !important;
+    color: #1A1815 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  #clinical-report-card * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm 15mm;
+  }
+}
