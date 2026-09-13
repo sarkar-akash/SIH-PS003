@@ -322,9 +322,10 @@ class VoiceNavigationCoordinator {
     );
   }
 
-  /// Dispatches Emergency SOS confirmation dialog.
+  /// Dispatches Emergency SOS confirmation dialog and opens device dialer.
   Future<void> triggerHelp(BuildContext context) async {
     debugPrint('[SOS ALERT] Emergency trigger dispatched via voice navigation at ${DateTime.now().toIso8601String()}');
+    launchGuardianDialer();
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => const SosConfirmationScreen(),
