@@ -282,7 +282,7 @@ export const PatientReportCardModal = ({
   <div class="container">
     <div class="header">
       <div>
-        <div class="brand">Smriti Setu Clinical Portal</div>
+        <div class="brand">Smriti Kunj Clinical Portal</div>
         <div class="brand-sub">Comprehensive Cognitive & Clinical Status Report</div>
       </div>
       <div class="meta-block">
@@ -437,7 +437,7 @@ export const PatientReportCardModal = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `Smriti_Setu_Report_${(patient.name || 'Patient').replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.html`;
+    link.download = `Smriti_Kunj_Report_${(patient.name || 'Patient').replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -528,7 +528,7 @@ export const PatientReportCardModal = ({
             <div>
               <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-terracotta/10 text-terracotta text-[10px] font-bold uppercase tracking-wider mb-1">
                 <Sparkles className="w-3 h-3" />
-                <span>Smriti Setu Clinical Telemetry</span>
+                <span>Smriti Kunj Clinical Telemetry</span>
               </div>
               <h1 className="text-xl sm:text-2xl font-black tracking-tight text-ink dark:text-cream">
                 Patient Cognitive & Health Report Card
